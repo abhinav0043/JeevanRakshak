@@ -1,97 +1,214 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>JeevanRakshak — Autonomous Underground Rescue</title>
-<meta name="description" content="JeevanRakshak is an AI-powered autonomous underground mine safety, monitoring and rescue system built for SIH 2026." />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>JeevanRakshak Rescue Command Center</title>
+<meta name="description" content="Public demo of the JeevanRakshak underground rescue command center."/>
 <style>
-:root{--bg:#071013;--panel:#0d1b20;--line:#17333b;--text:#eaf7f6;--muted:#8eaaa9;--cyan:#39e6cf;--amber:#ffb84d;--red:#ff6b6b}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#10282d 0,#071013 42%,#050a0d 100%);color:var(--text);font:15px/1.6 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
-.wrap{max-width:1180px;margin:auto;padding:28px}.nav{display:flex;align-items:center;justify-content:space-between;padding:10px 0 34px}.brand{font-weight:900;letter-spacing:.12em}.brand span{color:var(--cyan)}.tag{border:1px solid var(--line);background:#0a171b;padding:7px 11px;border-radius:999px;color:var(--muted);font-size:12px}
-.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:center;padding:45px 0 55px}.kicker{color:var(--cyan);font-weight:800;letter-spacing:.14em;font-size:12px}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.95;margin:12px 0 22px;letter-spacing:-.055em}.hero h1 span{color:var(--cyan)}.lead{font-size:19px;color:#b7cfce;max-width:720px}.buttons{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.btn{display:inline-block;padding:12px 17px;border-radius:10px;text-decoration:none;font-weight:800}.primary{background:var(--cyan);color:#03231f}.secondary{border:1px solid var(--line);color:var(--text);background:#0b171b}
-.hero-card,.card{background:linear-gradient(180deg,rgba(17,40,46,.9),rgba(8,20,24,.92));border:1px solid var(--line);border-radius:18px}.hero-card{padding:22px}.status{display:grid;grid-template-columns:1fr auto;gap:11px;padding:10px 0;border-bottom:1px solid #163138}.status:last-child{border:0}.ok{color:var(--cyan);font-weight:800}.progress{color:var(--amber);font-weight:800}
-.section{padding:32px 0}.section h2{font-size:30px;margin:0 0 8px}.section>p{color:var(--muted);max-width:830px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}.card{padding:20px}.card h3{margin:0 0 8px;color:#d9fffa}.card p{color:var(--muted);margin:0}.flow{margin-top:22px;padding:22px;background:#07161a;border:1px solid var(--line);border-radius:16px;overflow:auto;white-space:pre;color:#aee9e1;font:14px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace}
-.badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.badge{border:1px solid #23474f;border-radius:999px;padding:6px 10px;color:#b8d8d4;background:#0a171b;font-size:12px}
-footer{margin-top:40px;padding:30px 0;border-top:1px solid var(--line);color:var(--muted);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
-@media(max-width:800px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.wrap{padding:20px}.hero{padding-top:20px}}
+:root{
+  --bg:#071013;--panel:#0d171b;--panel2:#101d22;--line:#24343a;
+  --text:#edf4f5;--muted:#8fa3aa;--green:#65d6b0;--blue:#69b7ec;
+  --amber:#edc777;--red:#ef7c7c;--cyan:#57d8cf;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#081013;color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+.app{min-height:100vh;display:grid;grid-template-columns:225px 1fr}
+.sidebar{background:#0a1115;border-right:1px solid #1f2b31;padding:18px 14px;position:sticky;top:0;height:100vh}
+.brand{display:flex;gap:10px;align-items:center;font-weight:900;letter-spacing:.06em;font-size:18px;margin-bottom:24px}
+.brand-badge{width:34px;height:34px;border-radius:10px;border:1px solid #38565d;display:grid;place-items:center;color:var(--green)}
+.brand span{color:var(--green)}
+.brand small{display:block;color:#6f848c;font-size:9px;letter-spacing:.14em;margin-top:1px}
+.nav-label{font-size:10px;color:#5e7279;letter-spacing:.14em;margin:18px 10px 7px}
+.nav a{display:flex;align-items:center;gap:10px;color:#a8b6bb;text-decoration:none;padding:9px 10px;border-radius:7px;margin:2px 0;font-size:13px}
+.nav a.active{background:#15242a;color:#eff7f7;border:1px solid #263c43}
+.dot{width:7px;height:7px;border-radius:99px;background:#53666d}.active .dot{background:var(--green)}
+.base{position:absolute;left:14px;right:14px;bottom:16px;border-top:1px solid #1f2b31;padding-top:14px;color:#879aa1;font-size:11px}
+.base b{color:#d9e6e8;display:block;margin-bottom:3px}
+
+.workspace{min-width:0}
+.topbar{height:68px;border-bottom:1px solid #1f2b31;background:#0b1418;display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:5}
+.topbar .eyebrow{font-size:10px;color:#738990;letter-spacing:.12em}
+.statusline{display:flex;gap:9px;align-items:center;margin-top:4px;font-size:13px;font-weight:800}
+.live{width:8px;height:8px;border-radius:99px;background:var(--green);box-shadow:0 0 14px #65d6b077}
+.controls{display:flex;gap:8px}
+.btn{border:1px solid #2a3a40;background:#111b20;color:#cddadd;border-radius:7px;padding:8px 10px;font-size:11px}
+.btn.danger{color:#ffb0b0;border-color:#5b3232}
+.subbar{height:40px;border-bottom:1px solid #1f2b31;display:flex;justify-content:space-between;align-items:center;padding:0 20px;background:#091216;color:#82969d;font-size:11px}
+.badge{display:inline-block;border:1px solid #2e5148;color:#8ee4c5;background:#10231f;padding:4px 8px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.04em}
+.badge.demo{border-color:#66542d;background:#221d10;color:#f0cf79}
+main{padding:20px}
+.heading{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:16px}
+.heading .eyebrow{color:#6e858c;font-size:10px;letter-spacing:.15em}
+h1{font-size:26px;margin:4px 0 0}
+.mission{font-size:11px;color:#7f969d;text-align:right}
+
+.kpis{display:grid;grid-template-columns:repeat(8,minmax(110px,1fr));gap:8px;margin-bottom:12px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px}
+.kpi small{display:block;color:#748991;font-size:9px;letter-spacing:.08em;margin-bottom:5px}
+.kpi b{font-size:13px}
+.good{color:var(--green)}.warn{color:var(--amber)}.bad{color:var(--red)}.blue{color:var(--blue)}
+
+.grid{display:grid;grid-template-columns:1.25fr .75fr;gap:12px}
+.panel{background:linear-gradient(180deg,#0e191d,#0b1418);border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.ph{padding:10px 12px;border-bottom:1px solid #213239;display:flex;justify-content:space-between;align-items:center}
+.ph h2{font-size:11px;letter-spacing:.08em;margin:0}.ph p{margin:2px 0 0;font-size:9px;color:#6f858c}
+.pb{padding:12px}
+.visuals{display:grid;grid-template-columns:1.2fr .9fr .9fr;gap:9px}
+.screen{min-height:225px;border:1px solid #26383e;border-radius:7px;background:#05090b;position:relative;overflow:hidden}
+.screen-title{position:absolute;top:8px;left:8px;z-index:2;font-size:9px;color:#8ca2a8;background:#0b1519cc;padding:4px 6px;border-radius:4px}
+.camera{background:
+ radial-gradient(circle at 64% 42%,#203d3e 0 7%,transparent 8%),
+ linear-gradient(135deg,#0b1719 0 28%,#122629 29% 45%,#091214 46% 100%)}
+.person{position:absolute;left:53%;top:27%;width:72px;height:125px;border:2px solid var(--green);box-shadow:0 0 12px #65d6b030}
+.person:before{content:"PERSON 82% · 2.31 m";position:absolute;top:-22px;left:-2px;background:#10231f;color:#91e7c8;padding:3px 5px;font-size:8px;white-space:nowrap}
+.depth{background:linear-gradient(135deg,#102b3f,#15354f 28%,#2b5360 50%,#1e3740 70%,#09131a)}
+.depth:after{content:"2.31 m";position:absolute;inset:auto 12px 12px auto;color:#bfe9ff;font-weight:800}
+.thermal{display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);gap:2px;padding:20px;background:#05090b}
+.thermal i{display:block;border-radius:2px;background:#263a4b}.thermal i:nth-child(18),.thermal i:nth-child(19),.thermal i:nth-child(26),.thermal i:nth-child(27){background:#e6be62}.thermal i:nth-child(20),.thermal i:nth-child(28){background:#d97c5d}.thermal i:nth-child(35){background:#f0d17a}
+
+.airow{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:9px}
+.ai-card{border:1px solid #26383e;border-radius:7px;padding:11px;background:#0a1418}
+.ai-card h3{margin:0 0 8px;font-size:10px;letter-spacing:.08em}
+.ai-card .big{font-size:20px;font-weight:900;margin:5px 0}
+.list{display:grid;gap:7px}.line{display:flex;justify-content:space-between;gap:12px;padding-bottom:6px;border-bottom:1px dashed #24343a;color:#8ea2a8;font-size:10px}.line b{color:#dce8ea}
+
+.map{height:270px;position:relative;background:
+ linear-gradient(#0b1418cc,#0b1418cc),
+ repeating-linear-gradient(0deg,transparent 0 24px,#14252b 25px),
+ repeating-linear-gradient(90deg,transparent 0 24px,#14252b 25px)}
+.tunnel{position:absolute;background:#274149;border:1px solid #3b606b;border-radius:999px}
+.t1{left:35px;top:125px;width:270px;height:36px}.t2{left:278px;top:65px;width:38px;height:98px}.t3{left:298px;top:65px;width:180px;height:38px}
+.path{position:absolute;left:55px;top:139px;width:390px;height:3px;background:linear-gradient(90deg,var(--green),var(--blue));transform:rotate(-7deg);transform-origin:left center}
+.rover{position:absolute;left:260px;top:123px;width:22px;height:22px;border-radius:5px;background:var(--green);box-shadow:0 0 14px #65d6b055}
+.victim{position:absolute;left:432px;top:58px;width:18px;height:18px;border-radius:99px;background:var(--red);box-shadow:0 0 14px #ef7c7c77}
+.legend{position:absolute;left:10px;bottom:10px;background:#091216dd;border:1px solid #25383f;padding:7px 9px;font-size:9px;color:#83999f}
+
+.stack{display:grid;gap:12px}
+.network{height:160px;position:relative;background:#091216}
+.link{position:absolute;height:2px;background:#4d7a71;top:80px}
+.n1{left:42px;width:72px}.n2{left:132px;width:72px}.n3{left:222px;width:72px}.n4{left:312px;width:72px}
+.node{position:absolute;top:66px;width:30px;height:30px;border:1px solid #5c9a88;background:#13251f;border-radius:7px;display:grid;place-items:center;font-size:8px}
+.a{left:22px}.b{left:112px}.c{left:202px}.d{left:292px}.e{left:382px}
+.netlabel{position:absolute;top:112px;font-size:8px;color:#8ba0a6}.la{left:18px}.lb{left:108px}.lc{left:198px}.ld{left:286px}.le{left:379px}
+.env{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sensor{border:1px solid #26383e;border-radius:7px;padding:9px;background:#0a1418}.sensor small{font-size:8px;color:#71868d}.sensor b{display:block;margin-top:3px;font-size:15px}
+
+.footer{margin-top:12px;color:#62777e;font-size:9px;display:flex;justify-content:space-between;padding:8px 2px}
+.notice{margin-bottom:12px;border:1px solid #5a4a2a;background:#1c180e;color:#e6c875;border-radius:7px;padding:9px 11px;font-size:10px}
+@media(max-width:1100px){.app{grid-template-columns:70px 1fr}.sidebar .brand div,.nav span,.nav-label,.base{display:none}.sidebar{padding:16px 9px}.kpis{grid-template-columns:repeat(4,1fr)}.grid{grid-template-columns:1fr}.visuals{grid-template-columns:1fr 1fr}.visuals .screen:first-child{grid-column:1/-1}}
+@media(max-width:700px){.app{display:block}.sidebar{display:none}.topbar{position:static}.controls{display:none}.kpis{grid-template-columns:repeat(2,1fr)}.visuals,.airow{grid-template-columns:1fr}.visuals .screen:first-child{grid-column:auto}}
 </style>
 </head>
 <body>
-<div class="wrap">
-<nav class="nav"><div class="brand">JEEVAN<span>RAKSHAK</span></div><div class="tag">SIH 2026 · SIH26039</div></nav>
-<section class="hero">
-<div>
-<div class="kicker">AUTONOMOUS FIRST RESPONDER FOR UNDERGROUND MINES</div>
-<h1>Sense. Map. Think. <span>Rescue.</span></h1>
-<p class="lead">JeevanRakshak combines an autonomous R01 rescue rover, worker wearables, a Base Station Command Center and a resilient relay network to deliver real-time rescue intelligence before human responders enter hazardous underground sections.</p>
-<div class="buttons">
-<a class="btn primary" href="https://github.com/abhinav0043/JeevanRakshak">View GitHub</a>
-<a class="btn secondary" href="#architecture">System Architecture</a>
-</div>
-</div>
-<div class="hero-card">
-<div class="status"><span>R01 onboard autonomy</span><span class="ok">ROS 2</span></div>
-<div class="status"><span>Mapping & localization</span><span class="ok">ICP + RTAB-Map</span></div>
-<div class="status"><span>Navigation</span><span class="ok">Nav2</span></div>
-<div class="status"><span>Victim perception</span><span class="ok">RGB + Depth + Thermal</span></div>
-<div class="status"><span>Base supervision</span><span class="ok">Command Center</span></div>
-<div class="status"><span>Link recovery</span><span class="progress">JR_BYPASS</span></div>
-</div>
-</section>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand"><div class="brand-badge">JR</div><div>JEEVAN<span>RAKSHAK</span><small>RESCUE COMMAND</small></div></div>
+  <div class="nav-label">OPERATIONS</div>
+  <nav class="nav">
+    <a class="active" href="#"><i class="dot"></i><span>Command center</span></a>
+    <a href="#"><i class="dot"></i><span>Mine digital twin</span></a>
+    <a href="#"><i class="dot"></i><span>R01 rover</span></a>
+    <a href="#"><i class="dot"></i><span>Worker safety</span></a>
+    <a href="#"><i class="dot"></i><span>Network & recovery</span></a>
+    <a href="#"><i class="dot"></i><span>Mine environment</span></a>
+    <a href="#"><i class="dot"></i><span>Incident center</span></a>
+    <a href="#"><i class="dot"></i><span>Mission timeline</span></a>
+  </nav>
+  <div class="base"><b>BASE STATION</b>Local command node<br/>R01 autonomy · Base supervision</div>
+</aside>
 
-<section class="section">
-<h2>Why JeevanRakshak?</h2>
-<p>Mine emergencies can simultaneously remove visibility, positioning and communication. R01 is designed to enter first, build situational awareness and keep critical perception and navigation onboard even when the surface link is interrupted.</p>
-<div class="grid">
-<div class="card"><h3>Autonomous reconnaissance</h3><p>LiDAR, RGB-D and onboard SLAM provide measured tunnel geometry and rover localization without GPS.</p></div>
-<div class="card"><h3>Multi-sensor victim evidence</h3><p>Person detection is fused with D435 depth ranging and AMG8833 thermal evidence for possible-victim reporting.</p></div>
-<div class="card"><h3>Resilient communications</h3><p>A normal relay path carries broadband mission data, while JR_BYPASS is designed to restore connectivity around a failed wired segment.</p></div>
-</div>
-</section>
+<section class="workspace">
+  <header class="topbar">
+    <div><div class="eyebrow">MISSION CONTROL · UNDERGROUND RESCUE / RECONNAISSANCE</div><div class="statusline"><i class="live"></i>SYSTEM OPERATIONAL <span style="color:#6e838a;font-weight:500">00:18:42</span></div></div>
+    <div class="controls"><button class="btn">Pause autonomy</button><button class="btn">Return to base</button><button class="btn danger">Emergency stop</button></div>
+  </header>
+  <div class="subbar"><div>BASE ↔ R01 CONNECTED &nbsp; <span class="badge">AUTONOMOUS</span></div><div><span class="badge demo">DEMO MODE</span> &nbsp; PUBLIC VERCEL DEMO</div></div>
 
-<section class="section" id="architecture">
-<h2>System architecture</h2>
-<div class="flow">YDLIDAR + D435 + AMG8833 + ENVIRONMENT
-                  │
-                  ▼
-          RASPBERRY PI 5 / R01
-      ROS 2 · ICP · RTAB-MAP · NAV2
-                  │
-         ┌────────┴────────┐
-         ▼                 ▼
-      ESP32             MISSION DATA
- watchdog + motors          │
-         │                  ▼
-         ▼          RELAY NETWORK / JR_BYPASS
-      4WD DRIVE             │
-                            ▼
-                    BASE STATION DASHBOARD</div>
-</section>
+  <main>
+    <div class="notice">PUBLIC DEMO MODE — this Vercel deployment reproduces the JeevanRakshak command-center interface with simulated mission data. Live rover telemetry remains on the local Base Station network.</div>
 
-<section class="section">
-<h2>Base Station Command Center</h2>
-<p>The command center is the explanation and supervision layer. It visualizes what R01 publishes rather than replacing onboard autonomy.</p>
-<div class="grid">
-<div class="card"><h3>Perception</h3><p>RGB/night view, depth, thermal grid, person confidence, range and victim-fusion state.</p></div>
-<div class="card"><h3>Digital twin</h3><p>Mine map, rover pose, planned/travelled route, semantic markers and navigation state.</p></div>
-<div class="card"><h3>Network recovery</h3><p>Relay topology, failed segment, bypass state, deployed-node visualization and mission timeline.</p></div>
-</div>
-</section>
+    <div class="heading"><div><div class="eyebrow">JEEVANRAKSHAK / SIMULATED OPERATIONS</div><h1>Command center</h1></div><div class="mission">MISSION ACTIVE<br/>R01-SIH26</div></div>
 
-<section class="section">
-<h2>Technology</h2>
-<div class="badges">
-<span class="badge">Raspberry Pi 5</span><span class="badge">ESP32</span><span class="badge">ROS 2 Jazzy</span><span class="badge">RTAB-Map</span><span class="badge">Nav2</span><span class="badge">OpenCV DNN</span><span class="badge">Intel RealSense D435</span><span class="badge">YDLIDAR G2</span><span class="badge">AMG8833</span><span class="badge">React</span><span class="badge">FastAPI</span><span class="badge">WebSockets</span><span class="badge">LoRa</span>
-</div>
-</section>
+    <div class="kpis">
+      <div class="kpi"><small>R01 STATUS</small><b class="good">AUTONOMOUS EXPLORE</b></div>
+      <div class="kpi"><small>WORKERS ONLINE</small><b>6 / 6</b></div>
+      <div class="kpi"><small>NETWORK HEALTH</small><b class="good">HEALTHY</b></div>
+      <div class="kpi"><small>ACTIVE HAZARDS</small><b class="warn">01</b></div>
+      <div class="kpi"><small>RESCUE TARGETS</small><b class="bad">01</b></div>
+      <div class="kpi"><small>COMMUNICATION</small><b class="blue">BROADBAND</b></div>
+      <div class="kpi"><small>ROVER BATTERY</small><b>78%</b></div>
+      <div class="kpi"><small>RELAY PAYLOAD</small><b>3 AVAILABLE</b></div>
+    </div>
 
-<section class="section">
-<h2>Prototype status</h2>
-<p>This is a research prototype. The rover/base stack has been developed as separable, testable subsystems so mapping, navigation, perception, telemetry and communication recovery can be validated independently before final integrated operation.</p>
-</section>
+    <div class="grid">
+      <div>
+        <section class="panel">
+          <div class="ph"><div><h2>ROVER VISUAL INTELLIGENCE</h2><p>RGB / depth / thermal perception</p></div><span class="badge">R01 LIVE STACK</span></div>
+          <div class="pb">
+            <div class="visuals">
+              <div class="screen camera"><span class="screen-title">CAMERA · RGB / NIGHT</span><div class="person"></div></div>
+              <div class="screen depth"><span class="screen-title">DEPTH PERCEPTION</span></div>
+              <div class="screen thermal"><span class="screen-title">THERMAL · AMG8833 8×8</span>
+                <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+              </div>
+            </div>
+            <div class="airow">
+              <div class="ai-card"><h3>EDGE AI — LIVE PERCEPTION</h3><div class="big good">PERSON DETECTED</div><div class="list"><div class="line"><span>Confidence</span><b>82%</b></div><div class="line"><span>Nearest target</span><b>2.31 m</b></div><div class="line"><span>Thermal confirmation</span><b class="good">POSITIVE</b></div><div class="line"><span>Model</span><b>YOLOv4-tiny / OpenCV</b></div></div></div>
+              <div class="ai-card"><h3>AUTONOMOUS DECISION ENGINE</h3><div class="big warn">VICTIM FOUND</div><div class="list"><div class="line"><span>Trigger</span><b>Multi-sensor match</b></div><div class="line"><span>Decision</span><b>Hold position</b></div><div class="line"><span>Action</span><b>Report + mark map</b></div><div class="line"><span>Navigation</span><b>Nav2 paused</b></div></div></div>
+            </div>
+          </div>
+        </section>
 
-<footer><span>JeevanRakshak · Underground Rescue Command Center</span><span>Smart India Hackathon 2026 · SIH26039</span></footer>
+        <section class="panel" style="margin-top:12px">
+          <div class="ph"><div><h2>MINE DIGITAL TWIN</h2><p>RTAB-Map / rover pose / semantic mission markers</p></div><span class="badge">MAP FRAME</span></div>
+          <div class="map">
+            <div class="tunnel t1"></div><div class="tunnel t2"></div><div class="tunnel t3"></div>
+            <div class="path"></div><div class="rover"></div><div class="victim"></div>
+            <div class="legend">■ R01 &nbsp; ● possible victim &nbsp; ━ planned/travelled path</div>
+          </div>
+        </section>
+      </div>
+
+      <div class="stack">
+        <section class="panel">
+          <div class="ph"><div><h2>UNDERGROUND COMMUNICATION</h2><p>Relay topology & recovery</p></div><span class="badge">HEALTHY</span></div>
+          <div class="network">
+            <div class="link n1"></div><div class="link n2"></div><div class="link n3"></div><div class="link n4"></div>
+            <div class="node a">BASE</div><div class="node b">R1</div><div class="node c">R2</div><div class="node d">R3</div><div class="node e">R01</div>
+            <span class="netlabel la">Base</span><span class="netlabel lb">Relay 1</span><span class="netlabel lc">Relay 2</span><span class="netlabel ld">Relay 3</span><span class="netlabel le">Rover</span>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="ph"><div><h2>MINE ENVIRONMENT</h2><p>R01 onboard sensing</p></div><span class="badge demo">RAW / DEMO</span></div>
+          <div class="pb env">
+            <div class="sensor"><small>MQ-4 METHANE</small><b>184 ADC</b></div>
+            <div class="sensor"><small>MQ-7 CO</small><b>42 ADC</b></div>
+            <div class="sensor"><small>TEMPERATURE</small><b>25.4 °C</b></div>
+            <div class="sensor"><small>PRESSURE</small><b>983.4 hPa</b></div>
+            <div class="sensor"><small>THERMAL MAX</small><b class="warn">30.0 °C</b></div>
+            <div class="sensor"><small>THERMAL DELTA</small><b>2.51 °C</b></div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="ph"><div><h2>MISSION INTELLIGENCE</h2><p>Current autonomous state</p></div></div>
+          <div class="pb list">
+            <div class="line"><span>SLAM</span><b class="good">RTAB-MAP ACTIVE</b></div>
+            <div class="line"><span>Odometry</span><b>LiDAR ICP</b></div>
+            <div class="line"><span>Navigation</span><b>Nav2</b></div>
+            <div class="line"><span>Exploration</span><b>Frontier goal selection</b></div>
+            <div class="line"><span>Safety</span><b>ESP32 watchdog</b></div>
+            <div class="line"><span>Fallback</span><b>LoRa + JR_BYPASS</b></div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="footer"><span>JEEVANRAKSHAK · UNDERGROUND RESCUE COMMAND CENTER</span><span>SIH 2026 · SIH26039 · PUBLIC DEMO MODE</span></div>
+  </main>
+</section>
 </div>
 </body>
 </html>
