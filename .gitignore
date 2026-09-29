@@ -1,0 +1,39 @@
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+.ssh/
+# Dependencies and generated files
+node_modules/
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.tsbuildinfo
+# ROS build products
+build/
+install/
+log/
+# Local mission data
+*.sqlite*
+*.db
+*.bag
+*.mcap
+recordings/
+datasets/
+*.mp4
+*.avi
+*.mkv
+*.log
+# Workstation metadata
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
