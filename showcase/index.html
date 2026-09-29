@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>JeevanRakshak — Autonomous Underground Rescue</title>
+<meta name="description" content="JeevanRakshak is an AI-powered autonomous underground mine safety, monitoring and rescue system built for SIH 2026." />
+<style>
+:root{--bg:#071013;--panel:#0d1b20;--line:#17333b;--text:#eaf7f6;--muted:#8eaaa9;--cyan:#39e6cf;--amber:#ffb84d;--red:#ff6b6b}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#10282d 0,#071013 42%,#050a0d 100%);color:var(--text);font:15px/1.6 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+.wrap{max-width:1180px;margin:auto;padding:28px}.nav{display:flex;align-items:center;justify-content:space-between;padding:10px 0 34px}.brand{font-weight:900;letter-spacing:.12em}.brand span{color:var(--cyan)}.tag{border:1px solid var(--line);background:#0a171b;padding:7px 11px;border-radius:999px;color:var(--muted);font-size:12px}
+.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:center;padding:45px 0 55px}.kicker{color:var(--cyan);font-weight:800;letter-spacing:.14em;font-size:12px}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.95;margin:12px 0 22px;letter-spacing:-.055em}.hero h1 span{color:var(--cyan)}.lead{font-size:19px;color:#b7cfce;max-width:720px}.buttons{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.btn{display:inline-block;padding:12px 17px;border-radius:10px;text-decoration:none;font-weight:800}.primary{background:var(--cyan);color:#03231f}.secondary{border:1px solid var(--line);color:var(--text);background:#0b171b}
+.hero-card,.card{background:linear-gradient(180deg,rgba(17,40,46,.9),rgba(8,20,24,.92));border:1px solid var(--line);border-radius:18px}.hero-card{padding:22px}.status{display:grid;grid-template-columns:1fr auto;gap:11px;padding:10px 0;border-bottom:1px solid #163138}.status:last-child{border:0}.ok{color:var(--cyan);font-weight:800}.progress{color:var(--amber);font-weight:800}
+.section{padding:32px 0}.section h2{font-size:30px;margin:0 0 8px}.section>p{color:var(--muted);max-width:830px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}.card{padding:20px}.card h3{margin:0 0 8px;color:#d9fffa}.card p{color:var(--muted);margin:0}.flow{margin-top:22px;padding:22px;background:#07161a;border:1px solid var(--line);border-radius:16px;overflow:auto;white-space:pre;color:#aee9e1;font:14px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.badge{border:1px solid #23474f;border-radius:999px;padding:6px 10px;color:#b8d8d4;background:#0a171b;font-size:12px}
+footer{margin-top:40px;padding:30px 0;border-top:1px solid var(--line);color:var(--muted);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+@media(max-width:800px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.wrap{padding:20px}.hero{padding-top:20px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="nav"><div class="brand">JEEVAN<span>RAKSHAK</span></div><div class="tag">SIH 2026 · SIH26039</div></nav>
+<section class="hero">
+<div>
+<div class="kicker">AUTONOMOUS FIRST RESPONDER FOR UNDERGROUND MINES</div>
+<h1>Sense. Map. Think. <span>Rescue.</span></h1>
+<p class="lead">JeevanRakshak combines an autonomous R01 rescue rover, worker wearables, a Base Station Command Center and a resilient relay network to deliver real-time rescue intelligence before human responders enter hazardous underground sections.</p>
+<div class="buttons">
+<a class="btn primary" href="https://github.com/abhinav0043/JeevanRakshak">View GitHub</a>
+<a class="btn secondary" href="#architecture">System Architecture</a>
+</div>
+</div>
+<div class="hero-card">
+<div class="status"><span>R01 onboard autonomy</span><span class="ok">ROS 2</span></div>
+<div class="status"><span>Mapping & localization</span><span class="ok">ICP + RTAB-Map</span></div>
+<div class="status"><span>Navigation</span><span class="ok">Nav2</span></div>
+<div class="status"><span>Victim perception</span><span class="ok">RGB + Depth + Thermal</span></div>
+<div class="status"><span>Base supervision</span><span class="ok">Command Center</span></div>
+<div class="status"><span>Link recovery</span><span class="progress">JR_BYPASS</span></div>
+</div>
+</section>
+
+<section class="section">
+<h2>Why JeevanRakshak?</h2>
+<p>Mine emergencies can simultaneously remove visibility, positioning and communication. R01 is designed to enter first, build situational awareness and keep critical perception and navigation onboard even when the surface link is interrupted.</p>
+<div class="grid">
+<div class="card"><h3>Autonomous reconnaissance</h3><p>LiDAR, RGB-D and onboard SLAM provide measured tunnel geometry and rover localization without GPS.</p></div>
+<div class="card"><h3>Multi-sensor victim evidence</h3><p>Person detection is fused with D435 depth ranging and AMG8833 thermal evidence for possible-victim reporting.</p></div>
+<div class="card"><h3>Resilient communications</h3><p>A normal relay path carries broadband mission data, while JR_BYPASS is designed to restore connectivity around a failed wired segment.</p></div>
+</div>
+</section>
+
+<section class="section" id="architecture">
+<h2>System architecture</h2>
+<div class="flow">YDLIDAR + D435 + AMG8833 + ENVIRONMENT
+                  │
+                  ▼
+          RASPBERRY PI 5 / R01
+      ROS 2 · ICP · RTAB-MAP · NAV2
+                  │
+         ┌────────┴────────┐
+         ▼                 ▼
+      ESP32             MISSION DATA
+ watchdog + motors          │
+         │                  ▼
+         ▼          RELAY NETWORK / JR_BYPASS
+      4WD DRIVE             │
+                            ▼
+                    BASE STATION DASHBOARD</div>
+</section>
+
+<section class="section">
+<h2>Base Station Command Center</h2>
+<p>The command center is the explanation and supervision layer. It visualizes what R01 publishes rather than replacing onboard autonomy.</p>
+<div class="grid">
+<div class="card"><h3>Perception</h3><p>RGB/night view, depth, thermal grid, person confidence, range and victim-fusion state.</p></div>
+<div class="card"><h3>Digital twin</h3><p>Mine map, rover pose, planned/travelled route, semantic markers and navigation state.</p></div>
+<div class="card"><h3>Network recovery</h3><p>Relay topology, failed segment, bypass state, deployed-node visualization and mission timeline.</p></div>
+</div>
+</section>
+
+<section class="section">
+<h2>Technology</h2>
+<div class="badges">
+<span class="badge">Raspberry Pi 5</span><span class="badge">ESP32</span><span class="badge">ROS 2 Jazzy</span><span class="badge">RTAB-Map</span><span class="badge">Nav2</span><span class="badge">OpenCV DNN</span><span class="badge">Intel RealSense D435</span><span class="badge">YDLIDAR G2</span><span class="badge">AMG8833</span><span class="badge">React</span><span class="badge">FastAPI</span><span class="badge">WebSockets</span><span class="badge">LoRa</span>
+</div>
+</section>
+
+<section class="section">
+<h2>Prototype status</h2>
+<p>This is a research prototype. The rover/base stack has been developed as separable, testable subsystems so mapping, navigation, perception, telemetry and communication recovery can be validated independently before final integrated operation.</p>
+</section>
+
+<footer><span>JeevanRakshak · Underground Rescue Command Center</span><span>Smart India Hackathon 2026 · SIH26039</span></footer>
+</div>
+</body>
+</html>
